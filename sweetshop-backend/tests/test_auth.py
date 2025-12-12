@@ -7,7 +7,7 @@ def test_register_user():
     payload = {
         "name":"Sambhav",
         "email":"sambhavoct2004@gmail.com",
-        "pasward":"pasward123"
+        "password":"password123"
     }
     #creating a post request
     response = client.post("/api/auth/register",json=payload)
