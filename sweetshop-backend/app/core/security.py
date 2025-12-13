@@ -59,7 +59,7 @@ def get_current_user(token:str = Depends(oauth2_scheme),db:Session= Depends(get_
 def create_reset_token(data:dict, expires_minutes: int = 10):
     """Generate password reset token (valid for 10 minutes)."""
     to_encode = data.copy()
-    expire = data.copy(expire = datetime.now(timezone.utc)+timedelta(minutes=expires_minutes))
+    expire = datetime.now(timezone.utc)+timedelta(minutes=expires_minutes)
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, RESET_SECRET_KEY, algorithm=ALGORITHM)
 
