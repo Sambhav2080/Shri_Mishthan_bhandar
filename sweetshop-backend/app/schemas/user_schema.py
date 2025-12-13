@@ -6,6 +6,7 @@ class UserCreate(pydantic.BaseModel):
     name: str
     email: pydantic.EmailStr
     password: str = pydantic.Field(min_length = 8,max_length = 72)
+    role: str | None = "user"
     
     @pydantic.field_validator("email")
     def normalize_email(cls,v):
@@ -24,13 +25,14 @@ class UserResponse(pydantic.BaseModel):
     id: int
     name: str
     email: str
+    role: str
     model_config = pydantic.ConfigDict(from_attributes = True)
 
 #---------------- USER LOGIN ----------------
 class UserLogin(pydantic.BaseModel):
     email: str
     password: str
-    
+
     @pydantic.field_validator("email")
     def normalize_email(cls,v):
         return v.lower().strip()

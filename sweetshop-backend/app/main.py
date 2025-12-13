@@ -1,3 +1,4 @@
+"""Initialize FastAPI app and include authentication router"""
 from fastapi import FastAPI
 from app.api.auth import router as auth_router
 from app.database import Base,engine

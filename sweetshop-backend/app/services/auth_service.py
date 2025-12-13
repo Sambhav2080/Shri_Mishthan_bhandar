@@ -1,7 +1,8 @@
 from sqlalchemy.orm import Session
+from fastapi import HTTPException, Depends
 from app.models.user import User
 from app.schemas.user_schema import UserCreate
-from app.core.security import hash_password, create_reset_token
+from app.core.security import hash_password, create_reset_token, get_current_user
 from app.core.exceptions import UserAlreadyExistsException, InvalidCredentialsException
 import bcrypt
 
@@ -20,7 +21,9 @@ def create_user(db:Session,user_data:UserCreate):
     new_user = User(
         name = user_data.name,
         email = user_data.email,
-        password = hashed_pw)
+        password = hashed_pw,
+        role = user_data.role or "user"
+        )
     
     #add to database
     db.add(new_user)
@@ -43,6 +46,13 @@ def authenticate_user(db:Session, email: str, password: str):
         return None
     
     return user
+
+#---------------- AUTHORIZATION OF ADMIN ----------------
+def require_admin(current_user = Depends(get_current_user)):
+    """Allow only admin users to access protected admin routes."""
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    return current_user
 
 #---------------- GENERATE RESET TOKEN ----------------
 def generate_reset_token(db: Session, email: str):

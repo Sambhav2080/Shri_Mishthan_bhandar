@@ -3,7 +3,7 @@ from jose import jwt, JWTError
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.schemas.user_schema import UserCreate, UserResponse,UserLogin, RefreshTokenRequest, ForgotPasswordRequest, ResetPasswordRequest
-from app.services.auth_service import create_user,authenticate_user, generate_reset_token, reset_password
+from app.services.auth_service import create_user,authenticate_user, generate_reset_token, reset_password, require_admin
 from app.core.security import create_access_token,create_refresh_token,get_current_user, REFRESH_SECRET_KEY,ALGORITHM
 
 router = APIRouter(prefix = "/api/auth",tags = ["Auth"])
@@ -30,6 +30,12 @@ def login_user(user: UserLogin, db: Session = Depends(get_db)):
         "access_token":access_token,
         "refresh_token":refresh_token
     }
+
+#---------------- LOGIN ADMIN ONLY ----------------
+@router.get("/admin-only")
+def admin_only_route(current_user = Depends(require_admin)):
+    return {"message": "Welcome Admin"}
+
 
 # ---------------- REFRESH ----------------
 @router.post("/refresh")
