@@ -41,3 +41,6 @@ class UserLogin(pydantic.BaseModel):
         if not re.search(r"\d",v):
             raise ValueError("Password must conatin at least one digit.")
         return v
+    
+# class RefreshTokenRequest(pydantic.BaseModel):
+#     refresh_token:str

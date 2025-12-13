@@ -39,4 +39,73 @@ def test_login_user():
     data = response.json()
 
     assert data["email"] == "testlogin@gmail.com"
-    assert "token" in data
+    assert "access_token" in data
+    assert "refresh_token" in data
+
+def test_refresh_token():
+    # Step 1: Register a user
+    register_payload = {
+        "name": "Refresh_User",
+        "email": "refreshuser@gmail.com",
+        "password": "refreshpass1"
+    }
+
+    client.post("/api/auth/register", json=register_payload)
+
+    # Step 2: Login to get refresh token
+    login_payload = {
+        "email": "refreshuser@gmail.com",
+        "password": "refreshpass1"
+    }
+
+    login_response = client.post("/api/auth/login", json=login_payload)
+    assert login_response.status_code == 200
+
+    tokens = login_response.json()
+    refresh_token = tokens["refresh_token"]
+
+    # Step 3: Use refresh token to get new access token
+    refresh_response = client.post("/api/auth/refresh", json={"refresh_token": refresh_token})
+
+    assert refresh_response.status_code == 200
+
+    data = refresh_response.json()
+
+    # Must return new access token
+    assert "access_token" in data
+    assert len(data["access_token"]) > 20  # Token length sanity check
+
+def test_get_me():
+    # Step 1: Register user
+    register_payload = {
+        "name": "Me_User",
+        "email": "meuser@gmail.com",
+        "password": "mepassword1"
+    }
+
+    client.post("/api/auth/register", json=register_payload)
+
+    # Step 2: Login to get access token
+    login_payload = {
+        "email": "meuser@gmail.com",
+        "password": "mepassword1"
+    }
+
+    login_response = client.post("/api/auth/login", json=login_payload)
+    assert login_response.status_code == 200
+
+    tokens = login_response.json()
+    access_token = tokens["access_token"]
+
+    # Step 3: Call /me with Bearer token
+    headers = {"Authorization": f"Bearer {access_token}"}
+    me_response = client.get("/api/auth/me", headers=headers)
+
+    assert me_response.status_code == 200
+
+    user_data = me_response.json()
+
+    # Validate user info returned
+    assert user_data["email"] == "meuser@gmail.com"
+    assert user_data["name"] == "Me_User"
+    assert "id" in user_data
