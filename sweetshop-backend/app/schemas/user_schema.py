@@ -10,4 +10,5 @@ class UserResponse(pydantic.BaseModel):
     name: str
     email: str
 
+    
     model_config = pydantic.ConfigDict(from_attributes = True)
