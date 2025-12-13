@@ -14,3 +14,16 @@ class InvalidCredentialsException(HTTPException):
             detail = "Invalid email or password."
         )
 
+class SweetNotFound(Exception):
+    """Sweet does not exist in database."""
+    pass
+
+class OutOfStock(Exception):
+    """Cannot purchase because quantity is zero."""
+    pass
+
+class UnauthorizedAction(Exception):
+    """Action for admin only."""
+    pass
+
+

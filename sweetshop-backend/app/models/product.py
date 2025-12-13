@@ -8,4 +8,4 @@ class Product(Base):
     name = Column(String, nullable=False)
     category = Column(String, nullable=False)
     price = Column(Float, nullable=False)
-    stock = Column(Integer, default=0)
+    stock = Column(Integer,nullable = False, default=0)

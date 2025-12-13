@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-
 from app.database import get_db
 from app.core.security import get_current_user, require_admin
+from app.core.exceptions import SweetNotFound, OutOfStock
 from app.schemas.product_schema import ProductCreate, ProductUpdate, ProductResponse
 from app.services.product_service import (
     create_product, get_all_products, update_product, delete_product, get_product_by_id
@@ -54,3 +54,27 @@ def remove_product(
         raise HTTPException(status_code=404, detail="Product not found")
 
     return {"message": "Product deleted successfully"}
+
+#---------------- Purchase Product ----------------
+@router.post("/{product_id}/purchase")
+def purchase_product(product_id: int, db: Session = Depends(get_db)):
+    try:
+        return purchase_product(db, product_id)
+    except SweetNotFound:
+        raise HTTPException(404, "Sweet not found")
+    except OutOfStock:
+        raise HTTPException(400, "Out of stock")
+
+
+#---------------- Restock Product (ADMIN only) ----------------
+@router.post("/{sweet_id}/restock")
+def restock_product(
+    product_id: int,
+    amount: int = 1,
+    db: Session = Depends(get_db),
+    user=Depends(require_admin)
+):
+    try:
+        return restock_product(db, product_id, amount)
+    except SweetNotFound:
+        raise HTTPException(404, "Sweet not found")
