@@ -12,3 +12,7 @@ class UserResponse(pydantic.BaseModel):
 
     
     model_config = pydantic.ConfigDict(from_attributes = True)
+
+class UserLogin(pydantic.BaseModel):
+    email: str
+    password: str

@@ -22,3 +22,17 @@ def create_user(db:Session,user_data:UserCreate):
 
     return new_user
 
+def authenticate_user(db:Session, email: str, password: str):
+    #fetch user from database
+    user = db.query(User).filter(User.email == email).first()
+
+    if not user:
+        return None
+    
+    #verification of password
+    if not bcrypt.checkpw(password.encode("utf-8"), user.password.encode("utf-8")):
+        return None
+    
+    return user
+
+
