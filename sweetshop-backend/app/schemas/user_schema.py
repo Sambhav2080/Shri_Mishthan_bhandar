@@ -42,5 +42,5 @@ class UserLogin(pydantic.BaseModel):
             raise ValueError("Password must conatin at least one digit.")
         return v
     
-# class RefreshTokenRequest(pydantic.BaseModel):
-#     refresh_token:str
+class RefreshTokenRequest(pydantic.BaseModel):
+    refresh_token:str

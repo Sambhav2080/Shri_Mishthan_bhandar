@@ -12,7 +12,7 @@ SECRET_KEY = "mysecretkey123"
 REFRESH_SECRET_KEY = "refreshsecretkey456"
 ALGORITHM = "HS256"
 
-# oauth2_scheme = OAuth2PasswordBearer(tokenUrl = ".api/auth/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl = ".api/auth/login")
 
 def create_access_token(data: dict, expires_minutes: int = 30):
     to_encode = data.copy()
