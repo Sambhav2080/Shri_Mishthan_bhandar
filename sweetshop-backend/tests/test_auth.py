@@ -5,32 +5,32 @@ client = TestClient(app)
 
 def test_register_user():
     payload = {
-        "name": "Sambhav",
-        "email": "sambhavoct2004@gmail.com",
-        "password": "password123"
+        "name": "Test_Register_User",
+        "email": "Testregister@gmail.com",
+        "password": "testregister1"
     }
     response = client.post("/api/auth/register", json=payload)
 
     assert response.status_code == 201
     data = response.json()
 
-    assert data["name"] == "Sambhav"
-    assert data["email"] == "sambhavoct2004@gmail.com"
+    assert data["name"] == "Test_Register_User"
+    assert data["email"] == "testregister@gmail.com"
     assert "id" in data
 
 
 def test_login_user():
-    # register_payload = {
-    #     "name": "SambhavK",
-    #     "email": "sambhavoct2003@gmail.com",
-    #     "password": "password123"
-    # }
+    register_payload = {
+        "name": "Test_LoginUser",
+        "email": "Testlogin@gmail.com",
+        "password": "testlogin1"
+    }
 
-    # client.post("/api/auth/register", json=register_payload)
+    client.post("/api/auth/register", json=register_payload)
 
     login_payload = {
-        "email": "sambhavoct2004@gmail.com",
-        "password": "password123"
+        "email": "testlogin@gmail.com",
+        "password": "testlogin1"
     }
 
     response = client.post("/api/auth/login", json=login_payload)
@@ -38,5 +38,5 @@ def test_login_user():
     assert response.status_code == 200
     data = response.json()
 
-    assert data["email"] == "sambhavoct2004@gmail.com"
+    assert data["email"] == "testlogin@gmail.com"
     assert "token" in data

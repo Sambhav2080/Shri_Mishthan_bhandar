@@ -2,6 +2,13 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker,declarative_base
 import os
 
+#here every request will get a database session
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 #SQLite Databse
 DATABASE_URL ="sqlite:///.sweetshop.db"

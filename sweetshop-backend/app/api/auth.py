@@ -1,19 +1,12 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from app.database import SessionLocal
+from app.database import get_db
 from app.schemas.user_schema import UserCreate, UserResponse,UserLogin
 from app.services.auth_service import create_user,authenticate_user
 
-router = APIRouter(prefix = "/api/auth")
+router = APIRouter(prefix = "/api/auth",tags = ["Auth"])
 
-#here every request will get a database session
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
+# ---------------- REGISTER ----------------
 @router.post("/register",response_model = UserResponse,status_code = 201)
 def register_user(user:UserCreate,db:Session = Depends(get_db)):
     new_user =  create_user(db,user)
@@ -26,7 +19,7 @@ def login_user(user: UserLogin, db: Session = Depends(get_db)):
     if not authenticated:
         return{"error":"Invalid credentials"}
     
-    #qimple sample tokens
+    #simple sample tokens
     token = "dummy_token_123"
 
     return{
