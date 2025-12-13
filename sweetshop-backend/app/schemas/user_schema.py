@@ -1,6 +1,7 @@
 import pydantic
 import re
 
+#---------------- USER ----------------
 class UserCreate(pydantic.BaseModel):
     name: str
     email: pydantic.EmailStr
@@ -18,18 +19,18 @@ class UserCreate(pydantic.BaseModel):
             raise ValueError("Password must conatin at least one digit.")
         return v
 
+#---------------- USER RESPONSE ----------------
 class UserResponse(pydantic.BaseModel):
     id: int
     name: str
     email: str
-
-    
     model_config = pydantic.ConfigDict(from_attributes = True)
 
+#---------------- USER LOGIN ----------------
 class UserLogin(pydantic.BaseModel):
     email: str
     password: str
-
+    
     @pydantic.field_validator("email")
     def normalize_email(cls,v):
         return v.lower().strip()
@@ -41,14 +42,16 @@ class UserLogin(pydantic.BaseModel):
         if not re.search(r"\d",v):
             raise ValueError("Password must conatin at least one digit.")
         return v
-    
+
+#---------------- REFRESH TOKEN REQUEST ----------------
 class RefreshTokenRequest(pydantic.BaseModel):
     refresh_token:str
 
+#---------------- FORGOT PASSWORD REQUEST ----------------
 class ForgotPasswordRequest(pydantic.BaseModel):
     email: str
 
-
+#---------------- RESET PASSWORD REQUEST ----------------
 class ResetPasswordRequest(pydantic.BaseModel):
     token: str
     new_password: str

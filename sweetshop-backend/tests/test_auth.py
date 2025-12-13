@@ -3,6 +3,7 @@ from app.main import app
 
 client = TestClient(app)
 
+#case 1
 def test_register_user():
     payload = {
         "name": "Test_Register_User",
@@ -18,32 +19,30 @@ def test_register_user():
     assert data["email"] == "testregister@gmail.com"
     assert "id" in data
 
-
+#case 2
 def test_login_user():
     register_payload = {
         "name": "Test_LoginUser",
         "email": "Testlogin@gmail.com",
         "password": "testlogin1"
     }
-
     client.post("/api/auth/register", json=register_payload)
 
     login_payload = {
         "email": "testlogin@gmail.com",
         "password": "testlogin1"
     }
-
     response = client.post("/api/auth/login", json=login_payload)
 
     assert response.status_code == 200
     data = response.json()
-
     assert data["email"] == "testlogin@gmail.com"
     assert "access_token" in data
     assert "refresh_token" in data
 
+#case 3
 def test_refresh_token():
-    # Step 1: Register a user
+    #Register a user
     register_payload = {
         "name": "Refresh_User",
         "email": "refreshuser@gmail.com",
@@ -52,57 +51,50 @@ def test_refresh_token():
 
     client.post("/api/auth/register", json=register_payload)
 
-    # Step 2: Login to get refresh token
+    # Login to get refresh token
     login_payload = {
         "email": "refreshuser@gmail.com",
         "password": "refreshpass1"
     }
-
     login_response = client.post("/api/auth/login", json=login_payload)
     assert login_response.status_code == 200
 
     tokens = login_response.json()
     refresh_token = tokens["refresh_token"]
 
-    # Step 3: Use refresh token to get new access token
+    #Use refresh token to get new access token
     refresh_response = client.post("/api/auth/refresh", json={"refresh_token": refresh_token})
 
     assert refresh_response.status_code == 200
-
     data = refresh_response.json()
-
     # Must return new access token
     assert "access_token" in data
     assert len(data["access_token"]) > 20  # Token length sanity check
 
+#case 4
 def test_get_me():
-    # Step 1: Register user
+    #Register user
     register_payload = {
         "name": "Me_User",
         "email": "meuser@gmail.com",
         "password": "mepassword1"
     }
-
     client.post("/api/auth/register", json=register_payload)
 
-    # Step 2: Login to get access token
+    #Login to get access token
     login_payload = {
         "email": "meuser@gmail.com",
         "password": "mepassword1"
     }
-
     login_response = client.post("/api/auth/login", json=login_payload)
     assert login_response.status_code == 200
-
     tokens = login_response.json()
     access_token = tokens["access_token"]
 
-    # Step 3: Call /me with Bearer token
+    #Call /me with Bearer token
     headers = {"Authorization": f"Bearer {access_token}"}
     me_response = client.get("/api/auth/me", headers=headers)
-
     assert me_response.status_code == 200
-
     user_data = me_response.json()
 
     # Validate user info returned
@@ -110,6 +102,7 @@ def test_get_me():
     assert user_data["name"] == "Me_User"
     assert "id" in user_data
 
+#case 5
 def test_forgot_and_reset_password():
     # Register a user
     payload = {
@@ -142,6 +135,6 @@ def test_forgot_and_reset_password():
         "email": "resetuser@gmail.com",
         "password": "newpass123"
     })
-
+    
     assert login_response.status_code == 200
 

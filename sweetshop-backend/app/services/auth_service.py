@@ -5,9 +5,9 @@ from app.core.security import hash_password, create_reset_token
 from app.core.exceptions import UserAlreadyExistsException, InvalidCredentialsException
 import bcrypt
 
-#Registration of NEW USER
+#---------------- REGISTRATION OF NEW USER ----------------
 def create_user(db:Session,user_data:UserCreate):
-
+    
     #check Duplicate User
     existing = db.query(User).filter(User.email == user_data.email).first()
     if existing:
@@ -20,9 +20,8 @@ def create_user(db:Session,user_data:UserCreate):
     new_user = User(
         name = user_data.name,
         email = user_data.email,
-        password = hashed_pw
-    )
-
+        password = hashed_pw)
+    
     #add to database
     db.add(new_user)
     db.commit()
@@ -30,13 +29,12 @@ def create_user(db:Session,user_data:UserCreate):
 
     return new_user
 
-#Login USER
+#---------------- AUTHENTICATION OF USER ----------------
 def authenticate_user(db:Session, email: str, password: str):
-    
     email = email.lower().strip()
+
     #fetch user from database
     user = db.query(User).filter(User.email == email).first()
-
     if not user:
         return None
     
@@ -46,15 +44,15 @@ def authenticate_user(db:Session, email: str, password: str):
     
     return user
 
-#Reset Token
+#---------------- GENERATE RESET TOKEN ----------------
 def generate_reset_token(db: Session, email: str):
     user = db.query(User).filter(User.email == email.lower()).first()
     if not user:
         return None
-
+    
     return create_reset_token({"user_id": user.id})
 
-#Reset Password
+#---------------- RESET PASSWORD ----------------
 def reset_password(db: Session, token: str, new_password: str):
     from app.core.security import verify_reset_token, hash_password
     
@@ -65,7 +63,7 @@ def reset_password(db: Session, token: str, new_password: str):
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         return False
-
+    
     user.password = hash_password(new_password)
     db.commit()
     return True

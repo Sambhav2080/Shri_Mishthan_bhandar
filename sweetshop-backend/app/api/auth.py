@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends ,HTTPException
-from jose import jwt,JWTError
+from jose import jwt, JWTError
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.schemas.user_schema import UserCreate, UserResponse,UserLogin, RefreshTokenRequest, ForgotPasswordRequest, ResetPasswordRequest
@@ -22,10 +22,8 @@ def login_user(user: UserLogin, db: Session = Depends(get_db)):
     if not authenticated:
         return{"error":"Invalid credentials"}
     
-    #simple sample tokens
     access_token = create_access_token({"user_id":authenticated.id})
     refresh_token = create_refresh_token({"user_id":authenticated.id})
-
 
     return{
         "email": authenticated.email,
@@ -39,7 +37,6 @@ def refresh_token(data: RefreshTokenRequest):
     try:
         payload = jwt.decode(data.refresh_token,REFRESH_SECRET_KEY,algorithms = [ALGORITHM])
         user_id = payload.get("user_id")
-
     except JWTError:
         raise HTTPException(status_code= 401, detail = "Invalid Refresh Token")
     
@@ -47,10 +44,10 @@ def refresh_token(data: RefreshTokenRequest):
 
     return {"access_token":new_access_token}
 
-
 # ---------------- GET USER INFO ----------------
 @router.get("/me")
 def get_me(current_user = Depends(get_current_user)):
+    
     return {
         "id":current_user.id,
         "name": current_user.name,
@@ -67,7 +64,6 @@ def forgot_password(request: ForgotPasswordRequest, db: Session = Depends(get_db
 
     # Normally email would be sent — but for assignment we return the token
     return {"reset_token": reset_token}
-
 
 # ---------------- RESET PASSWORD ----------------
 @router.post("/reset-password")
