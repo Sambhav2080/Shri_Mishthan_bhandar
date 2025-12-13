@@ -1,6 +1,6 @@
 from passlib.context import CryptContext
 from datetime import datetime,timedelta,timezone
-from jose import jwt, JWSError
+from jose import jwt, JWTError
 from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from app.database import get_db
@@ -11,6 +11,7 @@ from app.models.user import User
 SECRET_KEY = "mysecretkey123"
 REFRESH_SECRET_KEY = "refreshsecretkey456"
 ALGORITHM = "HS256"
+RESET_SECRET_KEY = "resetsecretkey789"
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl = ".api/auth/login")
 
@@ -54,4 +55,20 @@ def get_current_user(token:str = Depends(oauth2_scheme),db:Session= Depends(get_
         raise HTTPException(status_code = 404, detail = "User not found")
 
     return user
+
+def create_reset_token(data:dict, expires_minutes: int = 10):
+    """Generate password reset token (valid for 10 minutes)."""
+    to_encode = data.copy()
+    expire = data.copy(expire = datetime.now(timezone.utc)+timedelta(minutes=expires_minutes))
+    to_encode.update({"exp": expire})
+    return jwt.encode(to_encode, RESET_SECRET_KEY, algorithm=ALGORITHM)
+
+def verify_reset_token(token: str):
+    """Decode reset token and return payload (user_id)."""
+    try:
+        payload = jwt.decode(token, RESET_SECRET_KEY, algorithms=[ALGORITHM])
+        return payload.get("user_id")
+    except JWTError:
+        return None
+
 

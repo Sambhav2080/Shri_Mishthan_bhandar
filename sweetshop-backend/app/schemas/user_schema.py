@@ -44,3 +44,11 @@ class UserLogin(pydantic.BaseModel):
     
 class RefreshTokenRequest(pydantic.BaseModel):
     refresh_token:str
+
+class ForgotPasswordRequest(pydantic.BaseModel):
+    email: str
+
+
+class ResetPasswordRequest(pydantic.BaseModel):
+    token: str
+    new_password: str

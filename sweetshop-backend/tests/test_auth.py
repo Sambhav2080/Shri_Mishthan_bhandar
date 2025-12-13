@@ -109,3 +109,39 @@ def test_get_me():
     assert user_data["email"] == "meuser@gmail.com"
     assert user_data["name"] == "Me_User"
     assert "id" in user_data
+
+def test_forgot_and_reset_password():
+    # Register a user
+    payload = {
+        "name": "ResetUser",
+        "email": "resetuser@gmail.com",
+        "password": "resetpass1"
+    }
+    client.post("/api/auth/register", json=payload)
+
+    # Forgot password → get reset token
+    forgot_response = client.post("/api/auth/forgot-password", json={
+        "email": "resetuser@gmail.com"
+    })
+    assert forgot_response.status_code == 200
+
+    reset_token = forgot_response.json()["reset_token"]
+    assert reset_token is not None
+
+    # Reset password using the token
+    reset_response = client.post("/api/auth/reset-password", json={
+        "token": reset_token,
+        "new_password": "newpass123"
+    })
+
+    assert reset_response.status_code == 200
+    assert reset_response.json()["message"] == "Password reset successful"
+
+    # Login with new password
+    login_response = client.post("/api/auth/login", json={
+        "email": "resetuser@gmail.com",
+        "password": "newpass123"
+    })
+
+    assert login_response.status_code == 200
+

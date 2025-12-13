@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from app.models.user import User
 from app.schemas.user_schema import UserCreate
-from app.core.security import hash_password,verify_password
+from app.core.security import hash_password, create_reset_token
 from app.core.exceptions import UserAlreadyExistsException, InvalidCredentialsException
 import bcrypt
 
@@ -45,5 +45,31 @@ def authenticate_user(db:Session, email: str, password: str):
         return None
     
     return user
+
+#Reset Token
+def generate_reset_token(db: Session, email: str):
+    user = db.query(User).filter(User.email == email.lower()).first()
+    if not user:
+        return None
+
+    return create_reset_token({"user_id": user.id})
+
+#Reset Password
+def reset_password(db: Session, token: str, new_password: str):
+    from app.core.security import verify_reset_token, hash_password
+    
+    user_id = verify_reset_token(token)
+    if not user_id:
+        return False
+    
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        return False
+
+    user.password = hash_password(new_password)
+    db.commit()
+    return True
+
+
 
 
