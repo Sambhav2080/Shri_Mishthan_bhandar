@@ -1,4 +1,4 @@
-# AI Kata – Sweet Shop Management System
+Shri Mishthan Bhandar
 
 ## Project Overview
 A full-stack Sweet Shop Management System built using FastAPI and React.
