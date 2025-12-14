@@ -1,13 +1,14 @@
-import gajjak from "../assets/hero/gajjak.jpeg";
+import boondi from "../assets/hero/boondi.jpeg";
 import jalebi from "../assets/hero/jalebi.jpeg";
 import mallpua from "../assets/hero/mallpua.jpeg";
-import samosa from "../assets/hero/samosa.jpeg";
+import pede from "../assets/hero/pede.jpeg";
+import rasgulla from "../assets/hero/rasgulla.jpeg";
 
 import { useEffect, useState } from "react";
 import "../styles/hero.css";
 
 const images = [
-  mallpua, gajjak, jalebi, samosa
+  mallpua, rasgulla, jalebi, boondi,pede
 ];
 
 export default function HeroSlider() {

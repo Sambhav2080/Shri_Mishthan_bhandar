@@ -14,7 +14,10 @@ ALGORITHM = "HS256"
 RESET_SECRET_KEY = "resetsecretkey789"
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl = ".api/auth/login")
-
+pwd_context = CryptContext(
+    schemes=["bcrypt"],
+    deprecated="auto"
+)
 #---------------- HASH PASSWORD ----------------
 def hash_password(plain_password:str)->str:
     return pwd_context.hash(plain_password)

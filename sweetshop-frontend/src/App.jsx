@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 
@@ -11,7 +11,7 @@ import Sweets from "./pages/Sweets";
 
 function App() {
   return (
-    <>
+    <BrowserRouter>
       <Navbar />
 
       <Routes>
@@ -24,7 +24,7 @@ function App() {
       </Routes>
 
       <Footer />
-    </>
+    </BrowserRouter>
   );
 }
 
