@@ -1,22 +1,15 @@
 
-import Footer from "../components/Footer";
-import Navbar from "../components/Navbar";
-import SweetCard from "../components/SweetCard";
-import "../styles/sweets.css";
-
 import barfi from "../assets/sweets/barfi.jpeg";
 import gulabjamun from "../assets/sweets/gulabjamun.jpeg";
 import laddu from "../assets/sweets/laddu.jpeg";
-// import Hero from "../components/Hero";
 import HeroSlider from "../components/HeroSlider";
+import SweetCard from "../components/SweetCard";
+import "../styles/sweets.css";
 
 export default function Home() {
   return (
     <>
-      
-      <Navbar />
       <HeroSlider />
-      {/* <Hero /> */}
 
       <section className="sweets-section">
         <h2>Our Popular Sweets</h2>
@@ -27,8 +20,6 @@ export default function Home() {
           <SweetCard image={gulabjamun} name="Gulab JAmun" price={300} />
       </div>
       </section>
-
-      <Footer />
     </>
   );
 }
