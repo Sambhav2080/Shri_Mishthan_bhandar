@@ -1,0 +1,69 @@
+.hero {
+  height: calc(85vh);
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background: linear-gradient(
+      rgba(0,0,0,0.4),
+      rgba(0,0,0,0.4)
+    ),
+    url("/src/assets/hero/jalebi.jpeg") center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  padding-left: 80px;
+  transition: background-image 1s ease-in-out;
+  position: relative;
+}
+.hero-content {
+  max-width: 600px;
+}
+
+
+.hero-content h1 {
+  color: white;
+  font-size: 48px;
+}
+
+.hero-content p {
+  color: #f4c430;
+  font-size: 20px;
+  margin: 10px 0;
+}
+
+.hero-content button {
+  background: #b11217;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.hero-overlay {
+  background: rgba(0, 0, 0, 0.45);
+  height: 100%;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 80px;
+}
+.hero-overlay h1 {
+  font-size: 3.5rem;
+  margin-bottom: 10px;
+}
+
+.hero-overlay p {
+  font-size: 1.3rem;
+  margin-bottom: 20px;
+}
+
+.hero-overlay button {
+  width: 180px;
+  padding: 12px;
+  background: #b11226;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+}
