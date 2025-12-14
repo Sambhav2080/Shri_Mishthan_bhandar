@@ -1,14 +1,14 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException,Body
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.core.security import get_current_user, require_admin
 from app.core.exceptions import SweetNotFound, OutOfStock
 from app.schemas.product_schema import ProductCreate, ProductUpdate, ProductResponse
 from app.services.product_service import (
-    create_product, get_all_products, update_product, delete_product, get_product_by_id
+    create_product, get_all_products, update_product, delete_product,purchase_sweet,restock_sweet
 )
 
-router = APIRouter(prefix="/api/products", tags=["Products"])
+router = APIRouter(prefix="/api/sweets", tags=["Sweets"])
 
 
 # ------------------ Create Product (Admin Only) ------------------
@@ -57,9 +57,16 @@ def remove_product(
 
 #---------------- Purchase Product ----------------
 @router.post("/{product_id}/purchase")
-def purchase_product(product_id: int, db: Session = Depends(get_db)):
+def purchase_product(product_id: int,data:dict = Body(), db: Session = Depends(get_db)):
+    
+    amount = int(data.get("stock") or 0)
+    
+    if amount <= 0:
+        raise HTTPException(400, "Invalid purchase quantity")
+
     try:
-        return purchase_product(db, product_id)
+        sweet = purchase_sweet(db, product_id,amount)
+        return {"id": sweet.id , "remaining_quantity":sweet.stock}
     except SweetNotFound:
         raise HTTPException(404, "Sweet not found")
     except OutOfStock:
@@ -67,14 +74,16 @@ def purchase_product(product_id: int, db: Session = Depends(get_db)):
 
 
 #---------------- Restock Product (ADMIN only) ----------------
-@router.post("/{sweet_id}/restock")
+@router.post("/{product_id}/restock")
 def restock_product(
     product_id: int,
-    amount: int = 1,
+    data: dict = Body(),
     db: Session = Depends(get_db),
     user=Depends(require_admin)
 ):
+    quantity  = int(data.get("quantity") or 0)
     try:
-        return restock_product(db, product_id, amount)
+        sweet = restock_sweet(db,product_id,quantity)
+        return {"id":sweet.id , "new_quantity":sweet.stock}
     except SweetNotFound:
         raise HTTPException(404, "Sweet not found")

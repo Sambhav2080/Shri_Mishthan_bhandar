@@ -1,7 +1,34 @@
 from fastapi.testclient import TestClient
 from app.main import app
+from app.database import SessionLocal
+from app.models.user import User
 
 client = TestClient(app)
+
+#---------------- CREATE ADMIN ----------------
+def create_admin_and_get_token(email="admin_test@gmail.com", password="adminpass1"):
+    admin_payload = {
+        "name": "TestAdmin",
+        "email": email,
+        "password": password
+    }
+
+    client.post("/api/auth/register", json=admin_payload)
+
+    # Manually update role to admin
+    db = SessionLocal()
+    user = db.query(User).filter(User.email == email).first()
+    user.role = "admin"
+    db.commit()
+    db.close()
+
+    login_res = client.post("/api/auth/login", json={
+        "email": email,
+        "password": password
+    })
+
+    return login_res.json()["access_token"]
+
 
 # ---------------- PURCHASE TEST ----------------
 def test_purchase_sweet():
@@ -10,13 +37,22 @@ def test_purchase_sweet():
         "name": "Gulab Jamun",
         "category": "Dessert",
         "price": 50,
-        "quantity": 10
+        "stock": 10
     }
-    create_res = client.post("/api/sweets", json=sweet_payload)
+    token = create_admin_and_get_token()
+
+    create_res = client.post(
+        "/api/sweets",
+        headers={"Authorization": f"Bearer {token}"},
+        json=sweet_payload
+    )
+
     sweet_id = create_res.json()["id"]
 
+    #print("CREATE RESPONSE:", create_res.json())
+
     # Purchase 3 units
-    purchase_res = client.post(f"/api/sweets/{sweet_id}/purchase", json={"quantity": 3})
+    purchase_res = client.post(f"/api/sweets/{sweet_id}/purchase", json={"stock": 3})
     assert purchase_res.status_code == 200
     assert purchase_res.json()["remaining_quantity"] == 7
 
@@ -27,9 +63,15 @@ def test_purchase_out_of_stock():
         "name": "Ladoo",
         "category": "Dessert",
         "price": 30,
-        "quantity": 1
+        "stock": 1
     }
-    create_res = client.post("/api/sweets", json=sweet_payload)
+    token = create_admin_and_get_token()
+
+    create_res = client.post(
+        "/api/sweets",
+        headers={"Authorization": f"Bearer {token}"},
+        json=sweet_payload
+    )
     sweet_id = create_res.json()["id"]
 
     # Try to purchase more than available
@@ -44,9 +86,15 @@ def test_restock_admin_only():
         "name": "Barfi",
         "category": "Dessert",
         "price": 40,
-        "quantity": 5
+        "stock": 5
     }
-    create_res = client.post("/api/sweets", json=sweet_payload)
+    token = create_admin_and_get_token("admin123@gmail.com", "adminpass1")
+
+    create_res = client.post(
+        "/api/sweets",
+        headers={"Authorization": f"Bearer {token}"},
+        json=sweet_payload
+    )
     sweet_id = create_res.json()["id"]
 
     # Register admin
@@ -55,7 +103,13 @@ def test_restock_admin_only():
         "email": "admin123@gmail.com",
         "password": "adminpass1"
     }
-    client.post("/api/auth/register", json=admin_payload)
+    token = create_admin_and_get_token("admin123@gmail.com", "adminpass1")
+
+    create_res = client.post(
+        "/api/sweets",
+        headers={"Authorization": f"Bearer {token}"},
+        json=sweet_payload
+    )
 
     # Login admin
     login_res = client.post("/api/auth/login", json={
@@ -81,9 +135,15 @@ def test_cart_checkout():
         "name": "Jalebi",
         "category": "Dessert",
         "price": 25,
-        "quantity": 20
+        "stock": 20
     }
-    create_res = client.post("/api/sweets", json=sweet_payload)
+    token = create_admin_and_get_token()
+
+    create_res = client.post(
+        "/api/sweets",
+        headers={"Authorization": f"Bearer {token}"},
+        json=sweet_payload
+    )
     sweet_id = create_res.json()["id"]
 
     # Add to cart

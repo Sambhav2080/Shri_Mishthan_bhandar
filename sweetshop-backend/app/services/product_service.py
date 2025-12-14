@@ -54,13 +54,13 @@ def delete_product(db: Session, product_id: int):
     return True
 
 #---------------- PURCHASE PRODUCT ----------------
-def purchase_product(db: Session, product_id: int):
+def purchase_sweet(db: Session, product_id: int,amount: int):
     sweet = get_product_by_id(db, product_id)
 
-    if sweet.quantity <= 0:
-        raise OutOfStock("This sweet is sold out!")
+    if sweet.stock < amount:
+        raise OutOfStock("NOT enough Stock Available")
 
-    sweet.stock -= 1
+    sweet.stock -= amount
     db.commit()
     db.refresh(sweet)
     return sweet
