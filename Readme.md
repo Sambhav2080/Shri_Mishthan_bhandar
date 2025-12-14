@@ -44,26 +44,30 @@ It allows managing sweets, stock, cart-based purchases, and user authentication.
 cd backend
 pip install -r requirements.txt
 uvicorn app.main:app --reload
+```
 
-
-##Frontend
+### Frontend
+```bash
 cd frontend
 npm install
 npm run dev
+```
 
-
-Screenshots
+### Screenshots
 
 Screenshots are available in:
 docs/screenshots/
 
-Diagrams
+### Diagrams
 
 Backend UML: docs/diagrams/backend_uml.png
 
 Database ER Diagram: docs/diagrams/database_er_diagram.png
 
-My AI Usage
+### Test Report
+Available in  docs/test-report.md
+
+### My AI Usage
 
 AI tools (ChatGPT) were used for learning assistance, architecture guidance,
 and best-practice suggestions. All core logic, UI design decisions,
