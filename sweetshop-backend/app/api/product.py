@@ -59,8 +59,11 @@ def remove_product(
 @router.post("/{product_id}/purchase")
 def purchase_product(product_id: int,data:dict = Body(), db: Session = Depends(get_db)):
     
-    amount = int(data.get("stock") or 0)
+    amount = int(data.get("stock") or data.get("quantity") or 1)
     
+    if amount is None:
+        raise HTTPException(400, "Quantity is required")
+
     if amount <= 0:
         raise HTTPException(400, "Invalid purchase quantity")
 

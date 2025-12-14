@@ -147,10 +147,16 @@ def test_cart_checkout():
     sweet_id = create_res.json()["id"]
 
     # Add to cart
-    cart_add_res = client.post("/api/cart/add", json={"sweet_id": sweet_id, "quantity": 5})
+    cart_add_res = client.post(
+        "/api/cart/add", 
+        headers={"Authorization": f"Bearer {token}"},
+        json={"product_id": sweet_id, "quantity": 5})
     assert cart_add_res.status_code == 200
 
     # Checkout
-    checkout_res = client.post("/api/cart/checkout")
+    checkout_res = client.post(
+        "/api/cart/checkout",
+        headers={"Authorization": f"Bearer {token}"}
+        )
     assert checkout_res.status_code == 200
     assert checkout_res.json()["message"] == "Order placed successfully"
