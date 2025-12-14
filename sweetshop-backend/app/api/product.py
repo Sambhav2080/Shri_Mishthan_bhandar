@@ -5,7 +5,7 @@ from app.core.security import get_current_user, require_admin
 from app.core.exceptions import SweetNotFound, OutOfStock
 from app.schemas.product_schema import ProductCreate, ProductUpdate, ProductResponse
 from app.services.product_service import (
-    create_product, get_all_products, update_product, delete_product,purchase_sweet,restock_sweet
+    create_product, get_all_products, update_product, delete_product,purchase_sweet,restock_sweet, search_sweet
 )
 
 router = APIRouter(prefix="/api/sweets", tags=["Sweets"])
@@ -90,3 +90,14 @@ def restock_product(
         return {"id":sweet.id , "new_quantity":sweet.stock}
     except SweetNotFound:
         raise HTTPException(404, "Sweet not found")
+    
+#---------------- SEARCH PRODUCT ----------------
+@router.get("/search", response_model=list[ProductResponse])
+def search_product(
+    name: str | None = None,
+    category: str | None = None,
+    min_price: float | None = None,
+    max_price: float | None = None,
+    db: Session = Depends(get_db)
+):
+    return search_sweet(db, name, category, min_price, max_price)

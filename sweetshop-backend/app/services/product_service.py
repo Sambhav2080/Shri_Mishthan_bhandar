@@ -66,9 +66,28 @@ def purchase_sweet(db: Session, product_id: int,amount: int):
     return sweet
 
 #---------------- RESTOCK PRODUCT ----------------
-def restock_sweet(db: Session, product_id: int, amount: int):
+def restock_sweet(db: Session, product_id: int, quantity: int):
     sweet = get_product_by_id(db, product_id)
-    sweet.stock += amount
+    sweet.stock += quantity
     db.commit()
     db.refresh(sweet)
     return sweet
+
+#---------------- SEARCH PRODUCT ----------------
+def search_sweet(db: Session, name=None, category=None, min_price=None, max_price=None):
+
+    query = db.query(Product)
+
+    if name:
+        query = query.filter(Product.name.ilike(f"%{name}%"))
+    
+    if category:
+        query = query.filter(Product.category.ilike(f"%{category}%"))
+
+    if min_price is not None:
+        query = query.filter(Product.price >= min_price)
+
+    if max_price is not None:
+        query = query.filter(Product.price <= max_price)
+
+    return query.all()
