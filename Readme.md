@@ -1,76 +1,279 @@
-Shri Mishthan Bhandar
+# 🍬 Shri Mishthan Bhandar – Sweet Shop Management System
 
-## Project Overview
-A full-stack Sweet Shop Management System built using FastAPI and React.
-It allows managing sweets, stock, cart-based purchases, and user authentication.
+**“Serving the sweetness of tradition with purity and trust”**
+
+Shri Mishthan Bhandar is a **full-stack Sweet Shop Management System** built using a
+**RESTful API architecture**.  
+The backend is **fully implemented and tested**, while the frontend is being
+developed using **React + Vite**.
+
+This system is designed to model a **real-world Indian sweet shop workflow**
+with secure authentication, role-based access, and scalable architecture.
 
 ---
 
-## Features
+## 🌟 Project Overview
 
-### Backend
+This application allows:
+- Customers to create an account and log in securely
+- Users to browse traditional Indian sweets
+- Orders to be placed only when stock is available
+- Multiple items to be added to the cart and purchased
+- Secure handling of authentication and authorization
+
+The backend follows clean architecture principles and industry best practices.
+
+---
+
+## 🎯 Core Features
+
+### 👤 User Features
+- User registration and login (JWT-based)
+- Browse sweets with stock availability
+- Search and filter sweets as per requirements
+- Add items to cart and checkout
+- Forgot password and reset password functionality
+- Order placement restricted to available stock
+
+---
+
+### 🛠️ Admin Features
+- Separate admin authentication
+- Create new sweets
+- Update sweet details (price, image, description)
+- Increase or decrease stock
+- Delete sweets
+- Role-based access control at the backend level
+
+---
+
+## 🔐 Backend Features
+
 - JWT-based authentication
-- Role-based access (Admin / User)
-- Product CRUD operations
-- Stock management
-- Cart checkout logic
-- Fully tested APIs
+- Role-based authorization (Admin / User)
+- RESTful CRUD APIs
+- Stock management system
+- Cart and order checkout logic
+- Password recovery workflows
+- Fully tested API endpoints
+- Clean and scalable backend architecture
 
-### Frontend
-- React + Vite UI
+---
+
+## 🎨 Frontend Features (In Progress 🚧)
+
+- React + Vite based UI
+- Traditional Indian sweets themed design
 - Navbar with routing
 - Home hero section
-- Sweets, Cart, Login & Register pages
-- Traditional Indian sweets theme
+- Sweets listing page
+- Cart page
+- Login and registration pages
 
-### Testing
-- Automated backend tests using pytest
+---
+
+## 🧪 Testing
+
+- Automated backend testing using **pytest**
 - Edge cases covered
+- API reliability and correctness ensured
 
 ---
 
-## Tech Stack
-- Backend: FastAPI, SQLAlchemy
-- Frontend: React, Vite
-- Database: SQLite
-- Testing: pytest
-
----
-
-## Setup Instructions
+## 🧰 Tech Stack
 
 ### Backend
+- FastAPI
+- SQLAlchemy
+- JWT Authentication
+
+### Frontend
+- React
+- Vite
+
+### Database
+- SQLite
+
+### Testing
+- pytest
+
+---
+
+## 📂 Project Structure
+
+sweet-shop-management/
+│── backend/
+│ ├── app/
+│ ├── tests/
+│ └── requirements.txt
+│
+│── frontend/
+│ ├── src/
+│ └── package.json
+│
+│── docs/
+│ ├── screenshots/
+│ ├── diagrams/
+│ └── test-report.md
+│
+│── README.md
+
+yaml
+Copy code
+
+---
+
+## ⚙️ How to Run the Project
+
+### 🔧 Backend Setup
+
 ```bash
 cd backend
 pip install -r requirements.txt
 uvicorn app.main:app --reload
 ```
+API will run at: http://127.0.0.1:8000
 
-### Frontend
+Swagger documentation: http://127.0.0.1:8000/docs
+
+## 🎨 Frontend Setup
 ```bash
+Copy code
 cd frontend
 npm install
 npm run dev
+Frontend runs at: http://localhost:5173
+```
+## 📘 API Documentation
+The backend follows RESTful API design principles with proper HTTP methods,
+status codes, and secure authentication.
+
+## 🔑 Authentication Flow
+User or Admin logs in or registers
+
+Backend issues a JWT access token
+
+Token is sent with each protected request using:
+
+makefile
+Copy code
+Authorization: Bearer <access_token>
+Role-based middleware validates permissions
+
+📌 Admin & User API Endpoints
+👤 Authentication Endpoints
+Method	Endpoint	Description	Access
+POST	/auth/register	Register a new user	Public
+POST	/auth/login	User/Admin login	Public
+POST	/auth/forgot-password	Send password reset link	Public
+POST	/auth/reset-password	Reset user password	Public
+
+🍬 Sweet (Product) Endpoints
+Method	Endpoint	Description	Access
+GET	/sweets/	Retrieve all sweets	User
+GET	/sweets/{id}	Retrieve sweet by ID	User
+POST	/sweets/	Create a new sweet	Admin
+PUT	/sweets/{id}	Update sweet details	Admin
+DELETE	/sweets/{id}	Delete a sweet	Admin
+
+📦 Stock Management Endpoints
+Method	Endpoint	Description	Access
+PATCH	/sweets/{id}/increase-stock	Increase sweet stock	Admin
+PATCH	/sweets/{id}/decrease-stock	Decrease sweet stock	Admin
+
+🛒 Cart & Order Endpoints
+Method	Endpoint	Description	Access
+POST	/cart/add	Add item to cart	User
+DELETE	/cart/remove	Remove item from cart	User
+GET	/cart/	View cart	User
+POST	/order/checkout	Place an order	User
+
+## 📸 Screenshots
+Screenshots are available in: \Assignment\Documents\Screenshots
+### Home Page
+![Home Page](Documents\Screenshots\homepage.png)
+
+![Home Page User Accessible](Documents\Screenshots\user homepage .png)
+
+### Login Page
+![Login Page](Documents/Screenshots/login page.png)
+(Documents/Screenshots/login trial.png)
+(Documents/Screenshots/successfull login.png)
+
+### registration Page
+![Regestration Page](Documents/Screenshots/register page.png)
+(Documents/Screenshots/doing registration.png)
+(Documents/Screenshots/successfull registration.png)
+
+### Sweets Ordering
+![Ordering Page ](Documents/Screenshots/sweets_section.png)
+
+```bash
+Copy code
+docs/screenshots/
+(Include Home, Login, Cart, and Admin panels.)
 ```
 
-### Screenshots
+## 📊 Diagrams
+### Backend Architecture Diagram
+(Documents\Backend EML Diagram.png)
 
-Screenshots are available in:
-docs/screenshots/
 
-### Diagrams
+## Database ER Diagram
+docs/diagrams/database_er_diagram.png
 
-Backend UML: docs/diagrams/backend_uml.png
 
-Database ER Diagram: docs/diagrams/database_er_diagram.png
 
-### Test Report
-Available in  docs/test-report.md
+## 🚀 Future Enhancements
+* Online payment gateway integration
 
-### My AI Usage
+* Live order tracking
 
-AI tools (ChatGPT) were used for learning assistance, architecture guidance,
-and best-practice suggestions. All core logic, UI design decisions,
-debugging, and final implementation were manually performed and understood by me.
+* Admin order management dashboard
 
-AI was used as a helper, not a replacement for development.
+* Customer management system
+
+* Marketing campaign management
+
+* AI-based sweet recommendation system:
+
+* Diabetic suitability scoring
+
+* Ingredient-based health analysis
+
+* Personalized sweet recommendations
+
+## 🤖 AI Usage Declaration
+### Backend
+Backend architecture and database schema were fully designed by me
+
+Core API logic and system design were implemented manually
+
+AI tools were used for:
+
+Concept clarification
+
+Debugging assistance
+
+Validation of best practices
+
+AI usage details are documented in individual commits
+
+### Frontend
+UI structure and business logic were planned manually
+
+AI tools assisted in code generation
+
+All generated code was reviewed, understood, and integrated manually
+
+AI was used as a learning and assistance tool, not as a replacement for development.
+
+👨‍💻 Author
+Sambhav
+Computer Science Engineering Student
+Chandigarh University
+
+👨‍💻 Co-authored-by: ChatGPT <AI@users.noreply.github.com>
+
+📜 License
+This project is licensed under the MIT License.
