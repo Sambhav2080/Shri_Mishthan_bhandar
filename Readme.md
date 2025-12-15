@@ -188,39 +188,47 @@ DELETE	/cart/remove	Remove item from cart	User
 GET	/cart/	View cart	User
 POST	/order/checkout	Place an order	User
 
-## 📸 Screenshots
-Screenshots are available in: \Assignment\Documents\Screenshots
-### Home Page
-![Home Page](Documents\Screenshots\homepage.png)
 
-![Home Page User Accessible](Documents\Screenshots\user homepage .png)
+---
 
-### Login Page
-![Login Page](Documents/Screenshots/login page.png)
-(Documents/Screenshots/login trial.png)
-(Documents/Screenshots/successfull login.png)
+### 🏠 Home Page
 
-### registration Page
-![Regestration Page](Documents/Screenshots/register page.png)
-(Documents/Screenshots/doing registration.png)
-(Documents/Screenshots/successfull registration.png)
+![Home Page](docs/screenshots/homepage.png)
 
-### Sweets Ordering
-![Ordering Page ](Documents/Screenshots/sweets_section.png)
+![User Home Page](docs/screenshots/user_homepage.png)
 
-```bash
-Copy code
-docs/screenshots/
-(Include Home, Login, Cart, and Admin panels.)
-```
+---
+
+### 🔐 Login Page
+
+![Login Page](docs/screenshots/login_page.png)
+
+![Login Attempt](docs/screenshots/login_trial.png)
+
+![Successful Login](docs/screenshots/successfull_login.png)
+
+---
+
+### 📝 Registration Page
+
+![Registration Page](docs/screenshots/register_page.png)
+
+![Registration in Progress](docs/screenshots/doing_registration.png)
+
+![Successful Registration](docs/screenshots/successfull_registration.png)
+
+---
+
+### 🍬 Sweets Ordering Section
+
+![Sweets Ordering](docs/screenshots/sweets_section.png)
+
 
 ## 📊 Diagrams
+
 ### Backend Architecture Diagram
-(Documents\Backend EML Diagram.png)
 
-
-## Database ER Diagram
-docs/diagrams/database_er_diagram.png
+![Backend Architecture Diagram](docs/backend_uml.png)
 
 
 
